@@ -1,6 +1,5 @@
 
-//import { FRUITS } from "fruits.js";
-console.log("good")
+console.log("main")
 
 
  engine = Engine.create();
