@@ -154,7 +154,7 @@ Events.on(engine, "collisionStart", (event) => {
         {
           render: {
             fillStyle: newFruit.color,
-            sprite: { texture: `./public/${randomFruit.label}.png` },
+            sprite: { texture: `./public/${newFruit.label}.png` },
           },
           label: newFruit.label,
         }
