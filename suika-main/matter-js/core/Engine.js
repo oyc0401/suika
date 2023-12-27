@@ -12,15 +12,15 @@ var Engine = {};
 
 module.exports = Engine;
 
-var Sleeping = require('./Sleeping');
+//var Sleeping = require('./Sleeping');
 var Resolver = require('../collision/Resolver');
 var Detector = require('../collision/Detector');
 var Pairs = require('../collision/Pairs');
 //var Events = require('./Events');
-var Composite = require('../body/Composite');
+//var Composite = require('../body/Composite');
 var Constraint = require('../constraint/Constraint');
 //var Common = require('./Common');
-var Body = require('../body/Body');
+//var Body = require('../body/Body');
 
 (function() {
 

@@ -13,12 +13,14 @@
 
 var Composite = {};
 
-module.exports = Composite;
+console.log('Composite')
 
-var Events = require('../core/Events');
-var Common = require('../core/Common');
-var Bounds = require('../geometry/Bounds');
-var Body = require('./Body');
+//module.exports = Composite;
+
+//var Events = require('../core/Events');
+//var Common = require('../core/Common');
+//var Bounds = require('../geometry/Bounds');
+//var Body = require('./Body');
 
 (function() {
 

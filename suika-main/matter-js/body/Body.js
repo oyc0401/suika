@@ -9,11 +9,13 @@
 
 var Body = {};
 
-module.exports = Body;
+console.log('Body')
+
+//module.exports = Body;
 
 //var Vertices = require('../geometry/Vertices');
 //var Vector = require('../geometry/Vector');
-var Sleeping = require('../core/Sleeping');
+//var Sleeping = require('../core/Sleeping'); 순환참조??
 //var Common = require('../core/Common');
 //var Bounds = require('../geometry/Bounds');
 //var Axes = require('../geometry/Axes');

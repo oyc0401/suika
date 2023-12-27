@@ -5,10 +5,11 @@
 */
 
 var Sleeping = {};
+console.log('Sleeping')
 
-module.exports = Sleeping;
+//module.exports = Sleeping;
 
-var Body = require('../body/Body');
+//var Body = require('../body/Body');
 //var Events = require('./Events');
 //var Common = require('./Common');
 
