@@ -7,9 +7,11 @@
 * @class Body
 */
 
+console.log('Body')
+
 var Body = {};
 
-console.log('Body')
+
 
 //module.exports = Body;
 

@@ -4,8 +4,10 @@
 * @class Sleeping
 */
 
-var Sleeping = {};
 console.log('Sleeping')
+
+var Sleeping = {};
+
 
 //module.exports = Sleeping;
 

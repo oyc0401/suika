@@ -12,12 +12,14 @@
 * @class World
 */
 
+console.log('World')
+
 var World = {};
 
-module.exports = World;
+//module.exports = World;
 
-var Composite = require('./Composite');
-var Common = require('../core/Common');
+//var Composite = require('./Composite');
+//var Common = require('../core/Common');
 
 (function() {
 

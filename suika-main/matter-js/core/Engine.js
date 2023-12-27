@@ -8,17 +8,19 @@
 * @class Engine
 */
 
+console.log('Engine')
+
 var Engine = {};
 
-module.exports = Engine;
+//module.exports = Engine;
 
 //var Sleeping = require('./Sleeping');
-var Resolver = require('../collision/Resolver');
-var Detector = require('../collision/Detector');
-var Pairs = require('../collision/Pairs');
+//var Resolver = require('../collision/Resolver');
+//var Detector = require('../collision/Detector');
+//var Pairs = require('../collision/Pairs');
 //var Events = require('./Events');
 //var Composite = require('../body/Composite');
-var Constraint = require('../constraint/Constraint');
+//var Constraint = require('../constraint/Constraint');
 //var Common = require('./Common');
 //var Body = require('../body/Body');
 

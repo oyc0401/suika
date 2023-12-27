@@ -11,9 +11,11 @@
 * @class Composite
 */
 
+console.log('Composite')
+
 var Composite = {};
 
-console.log('Composite')
+
 
 //module.exports = Composite;
 

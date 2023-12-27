@@ -10,12 +10,14 @@
 * @class Runner
 */
 
+console.log('Runner')
+
 var Runner = {};
 
-module.exports = Runner;
+//module.exports = Runner;
 
 //var Events = require('./Events');
-var Engine = require('./Engine');
+//var Engine = require('./Engine');
 //var Common = require('./Common');
 
 (function() {
