@@ -118,6 +118,7 @@ var Bodies = {};
      * @return {body} A new circle body
      */
     Bodies.circle = function(x, y, radius, options, maxSides) {
+        // yuchan: 1
         options = options || {};
 
         var circle = {

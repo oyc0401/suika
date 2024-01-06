@@ -24,6 +24,7 @@ var Common = {};
      * @return {} obj extended
      */
     Common.extend = function(obj, deep) {
+        // yuchan: 2
         var argsStart,
             args,
             deepClone;
