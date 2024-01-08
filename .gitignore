@@ -1,0 +1,7 @@
+node_modules/
+.replit
+package.json
+package-lock.json
+.breakpoints
+replit.nix
+vite.config.js

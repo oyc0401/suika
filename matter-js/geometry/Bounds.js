@@ -71,22 +71,22 @@ var Bounds = {};
      * @param {vector} point
      * @return {boolean} True if the bounds contain the point, otherwise false
      */
-    Bounds.contains = function(bounds, point) {
-        return point.x >= bounds.min.x && point.x <= bounds.max.x 
-               && point.y >= bounds.min.y && point.y <= bounds.max.y;
-    };
+    // Bounds.contains = function(bounds, point) {
+    //     return point.x >= bounds.min.x && point.x <= bounds.max.x 
+    //            && point.y >= bounds.min.y && point.y <= bounds.max.y;
+    // };
 
-    /**
-     * Returns true if the two bounds intersect.
-     * @method overlaps
-     * @param {bounds} boundsA
-     * @param {bounds} boundsB
-     * @return {boolean} True if the bounds overlap, otherwise false
-     */
-    Bounds.overlaps = function(boundsA, boundsB) {
-        return (boundsA.min.x <= boundsB.max.x && boundsA.max.x >= boundsB.min.x
-                && boundsA.max.y >= boundsB.min.y && boundsA.min.y <= boundsB.max.y);
-    };
+    // /**
+    //  * Returns true if the two bounds intersect.
+    //  * @method overlaps
+    //  * @param {bounds} boundsA
+    //  * @param {bounds} boundsB
+    //  * @return {boolean} True if the bounds overlap, otherwise false
+    //  */
+    // Bounds.overlaps = function(boundsA, boundsB) {
+    //     return (boundsA.min.x <= boundsB.max.x && boundsA.max.x >= boundsB.min.x
+    //             && boundsA.max.y >= boundsB.min.y && boundsA.min.y <= boundsB.max.y);
+    // };
 
     /**
      * Translates the bounds by the given vector.
@@ -94,12 +94,12 @@ var Bounds = {};
      * @param {bounds} bounds
      * @param {vector} vector
      */
-    Bounds.translate = function(bounds, vector) {
-        bounds.min.x += vector.x;
-        bounds.max.x += vector.x;
-        bounds.min.y += vector.y;
-        bounds.max.y += vector.y;
-    };
+    // Bounds.translate = function(bounds, vector) {
+    //     bounds.min.x += vector.x;
+    //     bounds.max.x += vector.x;
+    //     bounds.min.y += vector.y;
+    //     bounds.max.y += vector.y;
+    // };
 
     /**
      * Shifts the bounds to the given position.
@@ -107,14 +107,14 @@ var Bounds = {};
      * @param {bounds} bounds
      * @param {vector} position
      */
-    Bounds.shift = function(bounds, position) {
-        var deltaX = bounds.max.x - bounds.min.x,
-            deltaY = bounds.max.y - bounds.min.y;
+    // Bounds.shift = function(bounds, position) {
+    //     var deltaX = bounds.max.x - bounds.min.x,
+    //         deltaY = bounds.max.y - bounds.min.y;
             
-        bounds.min.x = position.x;
-        bounds.max.x = position.x + deltaX;
-        bounds.min.y = position.y;
-        bounds.max.y = position.y + deltaY;
-    };
+    //     bounds.min.x = position.x;
+    //     bounds.max.x = position.x + deltaX;
+    //     bounds.min.y = position.y;
+    //     bounds.max.y = position.y + deltaY;
+    // };
     
 })();

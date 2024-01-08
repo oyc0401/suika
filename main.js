@@ -13,6 +13,7 @@ console.log("main")
 //} from "matter-js";
 
 
+
 engine = Engine.create();
 const render = Render.create({
   engine,
@@ -82,7 +83,8 @@ function addCurrentFruit() {
 }
 
 function getRandomFruit() {
-  const randomIndex = Math.floor(Math.random() * 5);
+  const randomIndex = Math.floor(Math.random() * 11);
+  // const randomIndex = Math.floor(Math.random() * 5);
   const fruit = FRUITS[randomIndex];
 
   if (currentFruit && currentFruit.label === fruit.label)
