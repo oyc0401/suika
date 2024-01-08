@@ -1,5 +1,4 @@
-
-console.log("main")
+console.log("main");
 
 //import {
 //Engine,
@@ -13,6 +12,8 @@ console.log("main")
 //} from "matter-js";
 
 
+const marginVer = 200;
+const marginHor = 200;
 
 engine = Engine.create();
 const render = Render.create({
@@ -21,39 +22,54 @@ const render = Render.create({
   options: {
     wireframes: false,
     background: "#F7F4C8",
-    width: 620,
-    height: 850,
+    width: 620+marginVer*2,
+    height: 850+marginHor*2,
   },
 });
 
 const world = engine.world;
 
-const ground = Bodies.rectangle(310, 820, 620, 60, {
+
+
+const ground = Bodies.rectangle(310+marginVer, 820, 620, 60, {
   isStatic: true,
   render: {
     fillStyle: "#E6B143",
   },
 });
-const leftWall = Bodies.rectangle(15, 395, 30, 790, {
+const leftWall = Bodies.rectangle(15+marginVer, 395, 30, 790, {
   isStatic: true,
   render: {
     fillStyle: "#E6B143",
   },
 });
-const rightWall = Bodies.rectangle(605, 395, 30, 790, {
+const rightWall = Bodies.rectangle(605+marginVer, 395, 30, 790, {
   isStatic: true,
   render: {
     fillStyle: "#E6B143",
   },
 });
-const topLine = Bodies.rectangle(310, 150, 620, 2, {
+const topLine = Bodies.rectangle(310+marginVer, 150, 620, 2, {
   isStatic: true,
   isSensor: true,
   render: { fillStyle: "#E6B143" },
   label: "topLine",
 });
 
-World.add(world, [ground, leftWall, rightWall, topLine]);
+const leftOut = Bodies.rectangle(marginVer/2, 350, marginVer, 20, {
+  isStatic: true,
+  isSensor: true,
+  render: { fillStyle: "#FF0000" },
+  label: "out",
+});
+const rightOut = Bodies.rectangle(620+marginVer+marginVer/2, 350, marginVer, 20, {
+  isStatic: true,
+  isSensor: true,
+  render: { fillStyle: "#FF0000" },
+  label: "out",
+});
+
+World.add(world, [ground, leftWall, rightWall, topLine, leftOut, rightOut]);
 
 Render.run(render);
 Runner.run(engine);
@@ -71,7 +87,7 @@ function addCurrentFruit() {
     isSleeping: true,
     render: {
       fillStyle: randomFruit.color,
-      sprite: { texture: `./public/${randomFruit.label}.png` },
+      // sprite: { texture: `./public/${randomFruit.label}.png` },
     },
     restitution: 0.2,
   });
@@ -142,7 +158,7 @@ Events.on(engine, "collisionStart", (event) => {
       World.remove(world, [collision.bodyA, collision.bodyB]);
 
       const index = FRUITS.findIndex(
-        (fruit) => fruit.label === collision.bodyA.label
+        (fruit) => fruit.label === collision.bodyA.label,
       );
 
       // If last fruit, do nothing
@@ -156,10 +172,10 @@ Events.on(engine, "collisionStart", (event) => {
         {
           render: {
             fillStyle: newFruit.color,
-            sprite: { texture: `./public/${newFruit.label}.png` },
+            // sprite: { texture: `./public/${newFruit.label}.png` },
           },
           label: newFruit.label,
-        }
+        },
       );
       World.add(world, body);
     }

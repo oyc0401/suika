@@ -47,11 +47,6 @@ var Runner = {};
         };
     }
 
-    /**
-     * Creates a new Runner. The options parameter is an object that specifies any properties you wish to override the defaults.
-     * @method create
-     * @param {} options
-     */
     Runner.create = function(options) {
         var defaults = {
             fps: 60,
@@ -75,11 +70,6 @@ var Runner = {};
         return runner;
     };
 
-    /**
-     * Continuously ticks a `Matter.Engine` by calling `Runner.tick` on the `requestAnimationFrame` event.
-     * @method run
-     * @param {engine} engine
-     */
     Runner.run = function(runner, engine) {
         // create runner if engine is first argument
         if (typeof runner.positionIterations !== 'undefined') {
@@ -98,15 +88,6 @@ var Runner = {};
         return runner;
     };
 
-    /**
-     * A game loop utility that updates the engine and renderer by one step (a 'tick').
-     * Features delta smoothing, time correction and fixed or dynamic timing.
-     * Consider just `Engine.update(engine, delta)` if you're using your own loop.
-     * @method tick
-     * @param {runner} runner
-     * @param {engine} engine
-     * @param {number} time
-     */
     Runner.tick = function(runner, engine, time) {
         var timing = engine.timing,
             delta;
@@ -159,22 +140,10 @@ var Runner = {};
         Events.trigger(runner, 'afterTick', event);
     };
 
-    /**
-     * Ends execution of `Runner.run` on the given `runner`, by canceling the animation frame request event loop.
-     * If you wish to only temporarily pause the runner, see `runner.enabled` instead.
-     * @method stop
-     * @param {runner} runner
-     */
     Runner.stop = function(runner) {
         _cancelAnimationFrame(runner.frameRequestId);
     };
 
-    /**
-     * Alias for `Runner.run`.
-     * @method start
-     * @param {runner} runner
-     * @param {engine} engine
-     */
     Runner.start = function(runner, engine) {
         Runner.run(runner, engine);
     };
