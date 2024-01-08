@@ -14,13 +14,6 @@ var Detector = {};
 //var Collision = require('./Collision');
 
 (function() {
-
-    /**
-     * Creates a new collision detector.
-     * @method create
-     * @param {} options
-     * @return {detector} A new collision detector
-     */
     Detector.create = function(options) {
         var defaults = {
             bodies: [],
@@ -30,34 +23,14 @@ var Detector = {};
         return Common.extend(defaults, options);
     };
 
-    /**
-     * Sets the list of bodies in the detector.
-     * @method setBodies
-     * @param {detector} detector
-     * @param {body[]} bodies
-     */
     Detector.setBodies = function(detector, bodies) {
         detector.bodies = bodies.slice(0);
     };
 
-    /**
-     * Clears the detector including its list of bodies.
-     * @method clear
-     * @param {detector} detector
-     */
-    Detector.clear = function(detector) {
+    Detector.clear = function(detector) {console.log('Detector 3')
         detector.bodies = [];
     };
 
-    /**
-     * Efficiently finds all collisions among all the bodies in `detector.bodies` using a broadphase algorithm.
-     * 
-     * _Note:_ The specific ordering of collisions returned is not guaranteed between releases and may change for performance reasons.
-     * If a specific ordering is required then apply a sort to the resulting array.
-     * @method collisions
-     * @param {detector} detector
-     * @return {collision[]} collisions
-     */
     Detector.collisions = function(detector) {
         var collisions = [],
             pairs = detector.pairs,
@@ -139,14 +112,6 @@ var Detector = {};
         return collisions;
     };
 
-    /**
-     * Returns `true` if both supplied collision filters will allow a collision to occur.
-     * See `body.collisionFilter` for more information.
-     * @method canCollide
-     * @param {} filterA
-     * @param {} filterB
-     * @return {bool} `true` if collision can occur
-     */
     Detector.canCollide = function(filterA, filterB) {
         if (filterA.group === filterB.group && filterA.group !== 0)
             return filterA.group > 0;
@@ -154,39 +119,8 @@ var Detector = {};
         return (filterA.mask & filterB.category) !== 0 && (filterB.mask & filterA.category) !== 0;
     };
 
-    /**
-     * The comparison function used in the broadphase algorithm.
-     * Returns the signed delta of the bodies bounds on the x-axis.
-     * @private
-     * @method _sortCompare
-     * @param {body} bodyA
-     * @param {body} bodyB
-     * @return {number} The signed delta used for sorting
-     */
     Detector._compareBoundsX = function(bodyA, bodyB) {
         return bodyA.bounds.min.x - bodyB.bounds.min.x;
     };
-
-    /*
-    *
-    *  Properties Documentation
-    *
-    */
-
-    /**
-     * The array of `Matter.Body` between which the detector finds collisions.
-     * 
-     * _Note:_ The order of bodies in this array _is not fixed_ and will be continually managed by the detector.
-     * @property bodies
-     * @type body[]
-     * @default []
-     */
-
-    /**
-     * Optional. A `Matter.Pairs` object from which previous collision objects may be reused. Intended for internal `Matter.Engine` usage.
-     * @property pairs
-     * @type {pairs|null}
-     * @default null
-     */
 
 })();

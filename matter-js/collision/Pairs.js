@@ -15,12 +15,6 @@ var Pairs = {};
 
 (function() {
 
-    /**
-     * Creates a new pairs structure.
-     * @method create
-     * @param {object} options
-     * @return {pairs} A new pairs structure
-     */
     Pairs.create = function(options) {
         return Common.extend({ 
             table: {},
@@ -31,13 +25,6 @@ var Pairs = {};
         }, options);
     };
 
-    /**
-     * Updates pairs given a list of collisions.
-     * @method update
-     * @param {object} pairs
-     * @param {collision[]} collisions
-     * @param {number} timestamp
-     */
     Pairs.update = function(pairs, collisions, timestamp) {
         var pairsList = pairs.list,
             pairsListLength = pairsList.length,
@@ -113,20 +100,5 @@ var Pairs = {};
             delete pairsTable[pair.id];
         }
     };
-
-    /**
-     * Clears the given pairs structure.
-     * @method clear
-     * @param {pairs} pairs
-     * @return {pairs} pairs
-     */
-    Pairs.clear = function(pairs) {
-        pairs.table = {};
-        pairs.list.length = 0;
-        pairs.collisionStart.length = 0;
-        pairs.collisionActive.length = 0;
-        pairs.collisionEnd.length = 0;
-        return pairs;
-    };
-
+  
 })();

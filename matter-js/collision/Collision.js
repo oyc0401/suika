@@ -235,32 +235,6 @@ var Collision = {};
     };
 
     /**
-     * Projects vertices on an axis and returns an interval.
-     * @method _projectToAxis
-     * @private
-     * @param {} projection
-     * @param {} vertices
-     * @param {} axis
-     */
-    Collision._projectToAxis = function(projection, vertices, axis) {
-        var min = vertices[0].x * axis.x + vertices[0].y * axis.y,
-            max = min;
-
-        for (var i = 1; i < vertices.length; i += 1) {
-            var dot = vertices[i].x * axis.x + vertices[i].y * axis.y;
-
-            if (dot > max) { 
-                max = dot; 
-            } else if (dot < min) { 
-                min = dot; 
-            }
-        }
-
-        projection.min = min;
-        projection.max = max;
-    };
-
-    /**
      * Finds supporting vertices given two bodies along a given direction using hill-climbing.
      * @method _findSupports
      * @private
@@ -315,96 +289,5 @@ var Collision = {};
         return _supports;
     };
 
-    /*
-    *
-    *  Properties Documentation
-    *
-    */
-
-    /**
-     * A reference to the pair using this collision record, if there is one.
-     *
-     * @property pair
-     * @type {pair|null}
-     * @default null
-     */
-
-    /**
-     * A flag that indicates if the bodies were colliding when the collision was last updated.
-     * 
-     * @property collided
-     * @type boolean
-     * @default false
-     */
-
-    /**
-     * The first body part represented by the collision (see also `collision.parentA`).
-     * 
-     * @property bodyA
-     * @type body
-     */
-
-    /**
-     * The second body part represented by the collision (see also `collision.parentB`).
-     * 
-     * @property bodyB
-     * @type body
-     */
-
-    /**
-     * The first body represented by the collision (i.e. `collision.bodyA.parent`).
-     * 
-     * @property parentA
-     * @type body
-     */
-
-    /**
-     * The second body represented by the collision (i.e. `collision.bodyB.parent`).
-     * 
-     * @property parentB
-     * @type body
-     */
-
-    /**
-     * A `Number` that represents the minimum separating distance between the bodies along the collision normal.
-     *
-     * @readOnly
-     * @property depth
-     * @type number
-     * @default 0
-     */
-
-    /**
-     * A normalised `Vector` that represents the direction between the bodies that provides the minimum separating distance.
-     *
-     * @property normal
-     * @type vector
-     * @default { x: 0, y: 0 }
-     */
-
-    /**
-     * A normalised `Vector` that is the tangent direction to the collision normal.
-     *
-     * @property tangent
-     * @type vector
-     * @default { x: 0, y: 0 }
-     */
-
-    /**
-     * A `Vector` that represents the direction and depth of the collision.
-     *
-     * @property penetration
-     * @type vector
-     * @default { x: 0, y: 0 }
-     */
-
-    /**
-     * An array of body vertices that represent the support points in the collision.
-     * These are the deepest vertices (along the collision normal) of each body that are contained by the other body's vertices.
-     *
-     * @property supports
-     * @type vector[]
-     * @default []
-     */
 
 })();

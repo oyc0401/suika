@@ -11,13 +11,6 @@ var Contact = {};
 //module.exports = Contact;
 
 (function() {
-
-    /**
-     * Creates a new contact.
-     * @method create
-     * @param {vertex} vertex
-     * @return {contact} A new contact
-     */
     Contact.create = function(vertex) {
         return {
             vertex: vertex,

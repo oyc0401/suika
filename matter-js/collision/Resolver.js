@@ -23,11 +23,6 @@ var Resolver = {};
     Resolver._frictionNormalMultiplier = 5;
     Resolver._frictionMaxStatic = Number.MAX_VALUE;
 
-    /**
-     * Prepare pairs for position solving.
-     * @method preSolvePosition
-     * @param {pair[]} pairs
-     */
     Resolver.preSolvePosition = function(pairs) {
         var i,
             pair,
@@ -47,13 +42,6 @@ var Resolver = {};
         }
     };
 
-    /**
-     * Find a solution for pair positions.
-     * @method solvePosition
-     * @param {pair[]} pairs
-     * @param {number} delta
-     * @param {number} [damping=1]
-     */
     Resolver.solvePosition = function(pairs, delta, damping) {
         var i,
             pair,
@@ -114,11 +102,6 @@ var Resolver = {};
         }
     };
 
-    /**
-     * Apply position resolution.
-     * @method postSolvePosition
-     * @param {body[]} bodies
-     */
     Resolver.postSolvePosition = function(bodies) {
         var positionWarming = Resolver._positionWarming,
             bodiesLength = bodies.length,
@@ -162,11 +145,6 @@ var Resolver = {};
         }
     };
 
-    /**
-     * Prepare pairs for velocity solving.
-     * @method preSolveVelocity
-     * @param {pair[]} pairs
-     */
     Resolver.preSolveVelocity = function(pairs) {
         var pairsLength = pairs.length,
             i,
@@ -221,12 +199,6 @@ var Resolver = {};
         }
     };
 
-    /**
-     * Find a solution for pair velocities.
-     * @method solveVelocity
-     * @param {pair[]} pairs
-     * @param {number} delta
-     */
     Resolver.solveVelocity = function(pairs, delta) {
         var timeScale = delta / Common._baseDelta,
             timeScaleSquared = timeScale * timeScale,
