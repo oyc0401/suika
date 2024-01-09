@@ -18,8 +18,8 @@ const render = Render.create({
   options: {
     wireframes: false,
     background: "#F7F4C8",
-    width: 600,
-    height: 810,
+    width: 590,
+    height: 800,
   },
 });
 // 통 내부의 너비: 560
@@ -37,13 +37,13 @@ const ground = Bodies.rectangle(310, 795, 600, boxW, {
 const leftWallTrans = Bodies.rectangle(7.5, 200, 15, 790, {
   isStatic: true,
   render: {
-   //fillStyle: "transparent",
+   fillStyle: "transparent",
   },
 });
 const rightWallTrans = Bodies.rectangle(582.5, 200, 15, 790, {
   isStatic: true,
   render: {
-   // fillStyle: "transparent",
+   fillStyle: "transparent",
   },
 });
 const leftWall = Bodies.rectangle(7, 510, 15, 680, {
@@ -59,17 +59,17 @@ const rightWall = Bodies.rectangle(582.5, 510, 15, 680, {
   },
 });
 
-const boxFront = Bodies.rectangle(310, 180, 620, 15, {
+const boxFront = Bodies.rectangle(590/2, 165+7.5, 600, 15, {
   isStatic: true,
   isSensor: true,
   render: { fillStyle: "#E6B143" },
 });
-const boxBack = Bodies.rectangle(300, 130, 495, 15, {
+const boxBack = Bodies.rectangle(590/2, 115+7.5, 490, 15, {
   isStatic: true,
   isSensor: true,
   render: { fillStyle: "#E6B143" },
 });
-const boxleft = Bodies.rectangle(25, 160, 90, 15, {
+const boxleft = Bodies.rectangle(22.5, 145+7.5, 90, 15, {
   isStatic: true,
   angle: -Math.PI / 4,
   isSensor: true,
@@ -77,7 +77,7 @@ const boxleft = Bodies.rectangle(25, 160, 90, 15, {
     fillStyle: "#E6B143",
   },
 });
-const boxright = Bodies.rectangle(575, 160, 90, 15, {
+const boxright = Bodies.rectangle(570-2.5, 145+7.5, 90, 15, {
   isStatic: true,
   angle: Math.PI / 4,
   isSensor: true,
@@ -204,7 +204,6 @@ window.onkeydown = (event) => {
     case "ArrowLeft":
       if (interval) return;
       interval = setInterval(() => {
-        console.log("왼");
         if (
           currentBody.position.x - currentBody.circleRadius > 15 &&
           !disableAction
@@ -229,6 +228,7 @@ window.onkeydown = (event) => {
       }, 5);
       break;
     case "Space":
+      console.log(currentBody);
       offline();
       putFruit(currentBody);
       disableAction = true;
@@ -257,7 +257,7 @@ window.onkeyup = (event) => {
 
 Events.on(engine, "collisionStart", (event) => {
   event.pairs.forEach((collision) => {
-    if (collision.bodyA.label === collision.bodyB.label) {
+    if (collision.bodyA.label === collision.bodyB.label &&collision.bodyA.isSlepping==false && collision.bodyB.isSlepping==false  ) {
       console.log(collision.bodyA, collision.bodyB)
       World.remove(world, [collision.bodyA, collision.bodyB]);
 
