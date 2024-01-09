@@ -1,4 +1,5 @@
-console.log("main");
+
+console.log("main")
 
 //import {
 //Engine,
@@ -12,9 +13,6 @@ console.log("main");
 //} from "matter-js";
 
 
-const marginVer = 200;
-const marginHor = 200;
-
 engine = Engine.create();
 const render = Render.create({
   engine,
@@ -22,54 +20,39 @@ const render = Render.create({
   options: {
     wireframes: false,
     background: "#F7F4C8",
-    width: 620+marginVer*2,
-    height: 850+marginHor*2,
+    width: 620,
+    height: 850,
   },
 });
 
 const world = engine.world;
 
-
-
-const ground = Bodies.rectangle(310+marginVer, 820, 620, 60, {
+const ground = Bodies.rectangle(310, 820, 620, 60, {
   isStatic: true,
   render: {
     fillStyle: "#E6B143",
   },
 });
-const leftWall = Bodies.rectangle(15+marginVer, 395, 30, 790, {
+const leftWall = Bodies.rectangle(15, 395, 30, 790, {
   isStatic: true,
   render: {
     fillStyle: "#E6B143",
   },
 });
-const rightWall = Bodies.rectangle(605+marginVer, 395, 30, 790, {
+const rightWall = Bodies.rectangle(605, 395, 30, 790, {
   isStatic: true,
   render: {
     fillStyle: "#E6B143",
   },
 });
-const topLine = Bodies.rectangle(310+marginVer, 150, 620, 2, {
+const topLine = Bodies.rectangle(310, 150, 620, 2, {
   isStatic: true,
   isSensor: true,
   render: { fillStyle: "#E6B143" },
   label: "topLine",
 });
 
-const leftOut = Bodies.rectangle(marginVer/2, 350, marginVer, 20, {
-  isStatic: true,
-  isSensor: true,
-  render: { fillStyle: "#FF0000" },
-  label: "out",
-});
-const rightOut = Bodies.rectangle(620+marginVer+marginVer/2, 350, marginVer, 20, {
-  isStatic: true,
-  isSensor: true,
-  render: { fillStyle: "#FF0000" },
-  label: "out",
-});
-
-World.add(world, [ground, leftWall, rightWall, topLine, leftOut, rightOut]);
+World.add(world, [ground, leftWall, rightWall, topLine]);
 
 Render.run(render);
 Runner.run(engine);
@@ -85,9 +68,10 @@ function addCurrentFruit() {
   const body = Bodies.circle(300, 50, randomFruit.radius, {
     label: randomFruit.label,
     isSleeping: true,
+    isSensor:true,
     render: {
       fillStyle: randomFruit.color,
-      // sprite: { texture: `./public/${randomFruit.label}.png` },
+      //sprite: { texture: `./public/${randomFruit.label}.png` },
     },
     restitution: 0.2,
   });
@@ -100,7 +84,6 @@ function addCurrentFruit() {
 
 function getRandomFruit() {
   const randomIndex = Math.floor(Math.random() * 11);
-  // const randomIndex = Math.floor(Math.random() * 5);
   const fruit = FRUITS[randomIndex];
 
   if (currentFruit && currentFruit.label === fruit.label)
@@ -116,7 +99,8 @@ window.onkeydown = (event) => {
     case "ArrowLeft":
       if (interval) return;
       interval = setInterval(() => {
-        if (currentBody.position.x - 20 > 30)
+
+        if (currentBody.position.x - currentBody.circleRadius > 30)
           Body.setPosition(currentBody, {
             x: currentBody.position.x - 1,
             y: currentBody.position.y,
@@ -126,7 +110,7 @@ window.onkeydown = (event) => {
     case "ArrowRight":
       if (interval) return;
       interval = setInterval(() => {
-        if (currentBody.position.x + 20 < 590)
+        if (currentBody.position.x + currentBody.circleRadius < 590)
           Body.setPosition(currentBody, {
             x: currentBody.position.x + 1,
             y: currentBody.position.y,
@@ -134,6 +118,7 @@ window.onkeydown = (event) => {
       }, 5);
       break;
     case "Space":
+      currentBody.isSensor=false;
       disableAction = true;
       Sleeping.set(currentBody, false);
       setTimeout(() => {
@@ -158,7 +143,7 @@ Events.on(engine, "collisionStart", (event) => {
       World.remove(world, [collision.bodyA, collision.bodyB]);
 
       const index = FRUITS.findIndex(
-        (fruit) => fruit.label === collision.bodyA.label,
+        (fruit) => fruit.label === collision.bodyA.label
       );
 
       // If last fruit, do nothing
@@ -172,10 +157,10 @@ Events.on(engine, "collisionStart", (event) => {
         {
           render: {
             fillStyle: newFruit.color,
-            // sprite: { texture: `./public/${newFruit.label}.png` },
+           // sprite: { texture: `./public/${newFruit.label}.png` },
           },
           label: newFruit.label,
-        },
+        }
       );
       World.add(world, body);
     }

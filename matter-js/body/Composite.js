@@ -24,6 +24,8 @@ var Composite = {};
 
 (function() {
 
+  
+
     Composite.create = function(options) {
         return Common.extend({ 
             id: Common.nextId(),

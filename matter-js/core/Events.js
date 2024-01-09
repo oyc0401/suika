@@ -14,13 +14,6 @@ var Events = {};
 
 (function() {
 
-    /**
-     * Subscribes a callback function to the given object's `eventName`.
-     * @method on
-     * @param {} object
-     * @param {string} eventNames
-     * @param {function} callback
-     */
     Events.on = function(object, eventNames, callback) {
         var names = eventNames.split(' '),
             name;
@@ -35,13 +28,6 @@ var Events = {};
         return callback;
     };
 
-    /**
-     * Removes the given event callback. If no callback, clears all callbacks in `eventNames`. If no `eventNames`, clears all events.
-     * @method off
-     * @param {} object
-     * @param {string} eventNames
-     * @param {function} callback
-     */
     Events.off = function(object, eventNames, callback) {
         if (!eventNames) {
             object.events = {};
@@ -71,13 +57,6 @@ var Events = {};
         }
     };
 
-    /**
-     * Fires all the callbacks subscribed to the given object's `eventName`, in the order they subscribed, if any.
-     * @method trigger
-     * @param {} object
-     * @param {string} eventNames
-     * @param {} event
-     */
     Events.trigger = function(object, eventNames, event) {
         var names,
             name,
