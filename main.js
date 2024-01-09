@@ -1,5 +1,4 @@
-
-console.log("main")
+console.log("main");
 
 //import {
 //Engine,
@@ -11,7 +10,6 @@ console.log("main")
 // Sleeping,
 // Events,
 //} from "matter-js";
-
 
 engine = Engine.create();
 const render = Render.create({
@@ -36,23 +34,68 @@ const ground = Bodies.rectangle(310, 820, 620, 60, {
 const leftWall = Bodies.rectangle(15, 395, 30, 790, {
   isStatic: true,
   render: {
-    fillStyle: "#E6B143",
+    fillStyle: "transparent",
   },
 });
 const rightWall = Bodies.rectangle(605, 395, 30, 790, {
   isStatic: true,
   render: {
+    fillStyle: "transparent",
+  },
+});
+const leftWallColor = Bodies.rectangle(15, 395+55+50+10, 30, 790-110, {
+  isStatic: true,
+  isSleeping:true,
+  render: {
     fillStyle: "#E6B143",
   },
 });
-const topLine = Bodies.rectangle(310, 150, 620, 2, {
+const rightWallColor = Bodies.rectangle(605, 395+55+50+10, 30, 790-110, {
+  isStatic: true,
+  isSleeping:true,
+  render: {
+    fillStyle: "#E6B143",
+  },
+});
+
+
+
+const topLine = Bodies.rectangle(310, 60, 620, 100, {
+  isStatic: true,
+  isSensor: true,
+  render: { fillStyle: "transparent" },
+  label: "topLine",
+});
+const redline = Bodies.rectangle(310, 110, 620, 2, {
+  isStatic: true,
+  isSensor: true,
+  render: { fillStyle: "#FF0000" },
+  label: "redline",
+});
+
+const boxFront = Bodies.rectangle(310, 180, 620, 20, {
   isStatic: true,
   isSensor: true,
   render: { fillStyle: "#E6B143" },
-  label: "topLine",
+});
+const boxBack = Bodies.rectangle(310, 130, 620, 20, {
+  isStatic: true,
+  isSensor: true,
+  render: { fillStyle: "#E6B143" },
 });
 
-World.add(world, [ground, leftWall, rightWall, topLine]);
+
+World.add(world, [
+  ground,
+  leftWall,
+  rightWall,
+  leftWallColor,
+   rightWallColor,
+  boxFront,
+  boxBack,
+  redline,
+  topLine,
+]);
 
 Render.run(render);
 Runner.run(engine);
@@ -68,7 +111,7 @@ function addCurrentFruit() {
   const body = Bodies.circle(300, 50, randomFruit.radius, {
     label: randomFruit.label,
     isSleeping: true,
-    isSensor:true,
+    isSensor: true,
     render: {
       fillStyle: randomFruit.color,
       //sprite: { texture: `./public/${randomFruit.label}.png` },
@@ -83,13 +126,39 @@ function addCurrentFruit() {
 }
 
 function getRandomFruit() {
-  const randomIndex = Math.floor(Math.random() * 11);
+  let randomIndex = Math.floor(Math.random() * 5);
+
+  // //테스트용
+  // randomIndex = testFruits[testIdx];
+  // testIdx += 1;
+
   const fruit = FRUITS[randomIndex];
 
   if (currentFruit && currentFruit.label === fruit.label)
     return getRandomFruit();
 
   return fruit;
+}
+
+function putFruit(nowBody) {
+  const body = Bodies.circle(
+    nowBody.position.x,
+    nowBody.position.y,
+    currentFruit.radius,
+    {
+      label: currentFruit.label,
+      render: {
+        fillStyle: currentFruit.color,
+        //sprite: { texture: `./public/${randomFruit.label}.png` },
+      },
+      restitution: 0.2,
+    },
+  );
+
+  currentBody = body;
+  World.remove(world, nowBody);
+
+  World.add(world, body);
 }
 
 window.onkeydown = (event) => {
@@ -99,7 +168,6 @@ window.onkeydown = (event) => {
     case "ArrowLeft":
       if (interval) return;
       interval = setInterval(() => {
-
         if (currentBody.position.x - currentBody.circleRadius > 30)
           Body.setPosition(currentBody, {
             x: currentBody.position.x - 1,
@@ -118,15 +186,33 @@ window.onkeydown = (event) => {
       }, 5);
       break;
     case "Space":
-      currentBody.isSensor=false;
+      offline();
+      putFruit(currentBody);
       disableAction = true;
-      Sleeping.set(currentBody, false);
+      upbox();
       setTimeout(() => {
+        console.log(currentBody.position.y - currentBody.circleRadius);
+        if (currentBody.position.y - currentBody.circleRadius < 110) {
+          alert("넘었다고!");
+        }
+        online();
         addCurrentFruit();
         disableAction = false;
       }, 1000);
   }
 };
+
+function offline() {
+  World.remove(world, topLine);
+  topLine.isSensor = true;
+  World.add(world, topLine);
+}
+
+function online() {
+  World.remove(world, topLine);
+  topLine.isSensor = false;
+  World.add(world, topLine);
+}
 
 window.onkeyup = (event) => {
   switch (event.code) {
@@ -137,13 +223,18 @@ window.onkeyup = (event) => {
   }
 };
 
+function upbox() {
+  World.remove(world, boxFront);
+  World.add(world, boxFront);
+}
+
 Events.on(engine, "collisionStart", (event) => {
   event.pairs.forEach((collision) => {
     if (collision.bodyA.label === collision.bodyB.label) {
       World.remove(world, [collision.bodyA, collision.bodyB]);
 
       const index = FRUITS.findIndex(
-        (fruit) => fruit.label === collision.bodyA.label
+        (fruit) => fruit.label === collision.bodyA.label,
       );
 
       // If last fruit, do nothing
@@ -157,11 +248,14 @@ Events.on(engine, "collisionStart", (event) => {
         {
           render: {
             fillStyle: newFruit.color,
-           // sprite: { texture: `./public/${newFruit.label}.png` },
+            // sprite: { texture: `./public/${newFruit.label}.png` },
           },
           label: newFruit.label,
-        }
+        },
       );
+      if (body.position.y - body.circleRadius < 110) {
+          alert("합쳐져서 넘음!");
+        }
       World.add(world, body);
     }
     if (
