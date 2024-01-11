@@ -141,15 +141,15 @@ function addCurrentFruit() {
 
   World.add(world, body);
 }
-const testFruits = [7, 1, 7, 5, 0, 5, 5, 3, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4];
-//const testFruits = [9, 10, 8, 7, 6, 5, 5, 3, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4];
+// const testFruits = [7, 1, 7, 5, 0, 5, 5, 3, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4];
+const testFruits = [9, 10, 8, 7, 6, 5, 5, 3, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4];
 let testIdx = 0;
 
 function getRandomFruit() {
   let randomIndex = Math.floor(Math.random() * 9);
   //테스트용
-  // randomIndex = testFruits[testIdx];
-  // testIdx += 1;
+  randomIndex = testFruits[testIdx];
+  testIdx += 1;
 
   const fruit = FRUITS[randomIndex];
   // if (currentFruit && currentFruit.label === fruit.label)
@@ -181,14 +181,14 @@ function putFruit(nowBody) {
 function offline() {
   World.remove(world, topLine);
   topLine.isSensor = true;
- // topLine.render.fillStyle = "white";
+  // topLine.render.fillStyle = "white";
   World.add(world, topLine);
 }
 
 function online() {
   World.remove(world, topLine);
   topLine.isSensor = false;
- // topLine.render.fillStyle = "red";
+  // topLine.render.fillStyle = "red";
   World.add(world, topLine);
 }
 
@@ -263,7 +263,7 @@ Events.on(engine, "collisionStart", (event) => {
     if (
       collision.bodyA.label === collision.bodyB.label &&
       !collision.bodyA.isSensor &&
-      !collision.bodyA.isSensor
+      !collision.bodyB.isSensor
     ) {
       //console.log(collision.bodyA, collision.bodyB);
       World.remove(world, [collision.bodyA, collision.bodyB]);
