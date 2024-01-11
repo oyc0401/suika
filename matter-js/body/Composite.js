@@ -55,6 +55,7 @@ var Composite = {};
         }
 
         if (updateParents && composite.parent) {
+          d()
             Composite.setModified(composite.parent, isModified, updateParents, updateChildren);
         }
 

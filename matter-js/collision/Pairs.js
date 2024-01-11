@@ -85,10 +85,10 @@ var Pairs = {};
             if (!pair.confirmedActive) {
                 Pair.setActive(pair, false, timestamp);
                 collisionEnd.push(pair);
-
-                if (!pair.collision.bodyA.isSleeping && !pair.collision.bodyB.isSleeping) {
+            
+               
                     removePairIndex.push(i);
-                }
+                
             }
         }
 

@@ -164,7 +164,7 @@ var Engine = {};
     for (var i = 0; i < bodiesLength; i++) {
       var body = bodies[i];
 
-      if (body.isStatic || body.isSleeping) continue;
+      if (body.isStatic ) continue;
 
       // add the resultant force of gravity
       body.force.y += body.mass * gravity.y * gravityScale;
@@ -178,7 +178,7 @@ var Engine = {};
     for (var i = 0; i < bodiesLength; i++) {
       var body = bodies[i];
 
-      if (body.isStatic || body.isSleeping) continue;
+      if (body.isStatic) continue;
 
       Body.update(body, delta);
     }

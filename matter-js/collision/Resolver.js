@@ -199,12 +199,7 @@ var Resolver = {};
         }
     };
 
-    /**
-     * Find a solution for pair velocities.
-     * @method solveVelocity
-     * @param {pair[]} pairs
-     * @param {number} delta
-     */
+  
     Resolver.solveVelocity = function(pairs, delta) {
         var timeScale = delta / Common._baseDelta,
             timeScaleSquared = timeScale * timeScale,

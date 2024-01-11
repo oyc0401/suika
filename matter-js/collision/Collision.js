@@ -245,6 +245,7 @@ var Collision = {};
      * @return [vector]
      */
     Collision._findSupports = function(bodyA, bodyB, normal, direction) {
+    
         var vertices = bodyB.vertices,
             verticesLength = vertices.length,
             bodyAPositionX = bodyA.position.x,

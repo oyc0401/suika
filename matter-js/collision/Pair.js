@@ -99,6 +99,7 @@ var Pair = {};
      * @param {number} timestamp
      */
     Pair.setActive = function(pair, isActive, timestamp) {
+     
         if (isActive) {
             pair.isActive = true;
             pair.timeUpdated = timestamp;

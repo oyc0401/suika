@@ -17,54 +17,55 @@ const render = Render.create({
   element: document.getElementById("app"),
   options: {
     background: "transparent",
-    width: 590,
-    height: 800,
+    width: 590 + 200,
+    height: 800+200,
   },
 });
 // 통 내부의 너비: 560
 // 통 내부의 높이: 680
 const boxW = 15;
+const pl=100;
 
 const world = engine.world;
 
-const ground = Bodies.rectangle(310, 795, 600, boxW, {
+const ground = Bodies.rectangle(295+pl, 795, 590, boxW, {
   isStatic: true,
   render: { fillStyle: "#E6B143" },
 });
-const leftWallTrans = Bodies.rectangle(7.5, 200, 15, 790, {
+const leftWallTrans = Bodies.rectangle(7.5+pl, 200, 15+pl+pl, 790, {
   isStatic: true,
   render: { fillStyle: "transparent" },
 });
-const rightWallTrans = Bodies.rectangle(582.5, 200, 15, 790, {
+const rightWallTrans = Bodies.rectangle(582.5+pl, 200, 15+pl+pl, 790, {
   isStatic: true,
   render: { fillStyle: "transparent" },
 });
-const leftWall = Bodies.rectangle(7, 510, 15, 680, {
+const leftWall = Bodies.rectangle(7+pl,480, 15, 630, {
   isStatic: true,
   render: { fillStyle: "#E6B143" },
 });
-const rightWall = Bodies.rectangle(582.5, 510, 15, 680, {
+const rightWall = Bodies.rectangle(582.5+pl, 480, 15, 630, {
   isStatic: true,
   render: { fillStyle: "#E6B143" },
 });
 
-const boxFront = Bodies.rectangle(590 / 2, 165 + 7.5, 600, 15, {
+const boxFront = Bodies.rectangle(590 / 2+pl, 165 + 7.5, 590, 15, {
   isStatic: true,
   isSensor: true,
   render: { fillStyle: "#E6B143" },
 });
-const boxBack = Bodies.rectangle(590 / 2, 115 + 7.5, 490, 15, {
+const boxBack = Bodies.rectangle(590 / 2+pl, 115 + 7.5, 490, 15, {
   isStatic: true,
   isSensor: true,
   render: { fillStyle: "#E6B143" },
 });
-const boxleft = Bodies.rectangle(22.5, 145 + 7.5, 90, 15, {
+const boxleft = Bodies.rectangle(22.5+pl, 145 + 7.5, 90, 15, {
   isStatic: true,
   angle: -Math.PI / 4,
   isSensor: true,
   render: { fillStyle: "#E6B143" },
 });
-const boxright = Bodies.rectangle(570 - 2.5, 145 + 7.5, 90, 15, {
+const boxright = Bodies.rectangle(560+pl, 145-7.5 + 7.5, 90-20, 15, {
   isStatic: true,
   angle: Math.PI / 4,
   isSensor: true,
@@ -72,28 +73,41 @@ const boxright = Bodies.rectangle(570 - 2.5, 145 + 7.5, 90, 15, {
 });
 
 // 경계선 높이: 110
-const topLine = Bodies.rectangle(310, 60, 620, 100, {
+const topLine = Bodies.rectangle(310+pl, 60, 620, 100, {
   isStatic: true,
   render: { fillStyle: "transparent" },
   label: "topLine",
 });
-const redline = Bodies.rectangle(310, 110, 620, 2, {
+const redline = Bodies.rectangle(310+pl, 110, 620, 2, {
   isStatic: true,
   isSensor: true,
   render: { fillStyle: "#FF0000" },
   label: "redline",
 });
+const hintLine = Bodies.rectangle(295+pl, 510, 4, 800, {
+  isStatic: true,
+  isSensor: true,
+  render: { fillStyle: "#FFFFFF" },
+});
+const cloud = Bodies.rectangle(295 + 50+pl, 110 - 30, 180, 90, {
+  isStatic: true,
+  isSensor: true,
+  render: { fillStyle: "#FFFFFF" },
+});
 
 World.add(world, [
+  boxBack,
+  hintLine,
   ground,
   leftWall,
   rightWall,
+  boxleft,
+  boxright,
+  cloud,
   leftWallTrans,
   rightWallTrans,
   boxFront,
-  boxBack,
-  boxleft,
-  boxright,
+
   redline,
   topLine,
 ]);
@@ -105,15 +119,15 @@ let currentBody = null;
 let currentFruit = null;
 let interval = null;
 let disableAction = false;
-let restitution = 0;
-let lastPosition = 300;
+let restitution = 0.1;
+let lastPosition = 295+pl;
 
-function addCurrentFruit() {
+function addNewFruit() {
   const randomFruit = getRandomFruit();
 
-  const body = Bodies.circle(lastPosition, 110, randomFruit.radius, {
+  const body = Bodies.circle(lastPosition, 110+pl, randomFruit.radius, {
     label: randomFruit.label,
-    isSleeping: true,
+    isStatic: true,
     isSensor: true,
     render: {
       fillStyle: randomFruit.color,
@@ -121,21 +135,22 @@ function addCurrentFruit() {
     },
     restitution: restitution,
   });
-
+  hintLine.render.fillStyle = "white";
   currentBody = body;
   currentFruit = randomFruit;
 
   World.add(world, body);
+  upbox();
 }
 // const testFruits = [7, 1, 7, 5, 0, 5, 5, 3, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4];
 const testFruits = [9, 10, 8, 7, 6, 5, 5, 3, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4];
 let testIdx = 0;
 
 function getRandomFruit() {
-  let randomIndex = Math.floor(Math.random() * 9);
+  let randomIndex = Math.floor(Math.random() * 5);
   //테스트용
-  randomIndex = testFruits[testIdx];
-  testIdx += 1;
+  // randomIndex = testFruits[testIdx];
+  // testIdx += 1;
 
   const fruit = FRUITS[randomIndex];
   // if (currentFruit && currentFruit.label === fruit.label)
@@ -143,7 +158,8 @@ function getRandomFruit() {
   return fruit;
 }
 
-function putFruit(nowBody) {
+function dropFruit(nowBody) {
+  hintLine.render.fillStyle = "transparent";
   const body = Bodies.circle(
     nowBody.position.x,
     nowBody.position.y,
@@ -162,6 +178,7 @@ function putFruit(nowBody) {
   World.remove(world, nowBody);
 
   World.add(world, body);
+  upbox();
 }
 
 function offline() {
@@ -184,17 +201,19 @@ function upbox() {
 }
 
 function afterCol() {
-  if (currentBody.position.y - currentBody.circleRadius < 110) {
+  if (currentBody.position.y - currentBody.circleRadius < 110+pl) {
     gameover();
   }
   currentBody = null;
   online();
-  addCurrentFruit();
+  addNewFruit();
   disableAction = false;
 }
 
 function gameover() {
+  if (disableAction) return;
   alert("게임 오버");
+  disableAction = true;
   Render.stop();
   Runner.stop();
 }
@@ -206,29 +225,47 @@ window.onkeydown = (event) => {
     case "ArrowLeft":
       if (interval) return;
       interval = setInterval(() => {
-        if (currentBody.position.x - 53 > 15 && !disableAction)
+        if (currentBody.position.x - 53 > 15+pl && !disableAction) {
           Body.setPosition(currentBody, {
             x: currentBody.position.x - 1,
             y: currentBody.position.y,
           });
+          Body.setPosition(hintLine, {
+            x: hintLine.position.x - 1,
+            y: hintLine.position.y,
+          });
+          Body.setPosition(cloud, {
+            x: cloud.position.x - 1,
+            y: cloud.position.y,
+          });
+        }
       }, 5);
       break;
     case "ArrowRight":
       if (interval) return;
       interval = setInterval(() => {
-        if (currentBody.position.x + 53 < 575 && !disableAction)
+        if (currentBody.position.x + 53 < 575+pl && !disableAction) {
           Body.setPosition(currentBody, {
             x: currentBody.position.x + 1,
             y: currentBody.position.y,
           });
+          Body.setPosition(hintLine, {
+            x: hintLine.position.x + 1,
+            y: hintLine.position.y,
+          });
+          Body.setPosition(cloud, {
+            x: cloud.position.x + 1,
+            y: cloud.position.y,
+          });
+        }
       }, 5);
       break;
     case "Space":
       //console.log(currentBody);
       offline();
-      putFruit(currentBody);
+      dropFruit(currentBody);
       disableAction = true;
-      upbox();
+
       lastPosition = currentBody.position.x;
   }
 };
@@ -300,4 +337,4 @@ Events.on(engine, "collisionStart", (event) => {
   });
 });
 
-addCurrentFruit();
+addNewFruit();

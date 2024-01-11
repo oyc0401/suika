@@ -122,11 +122,7 @@ var Render = {};
       for (k = body.parts.length > 1 ? 1 : 0; k < body.parts.length; k++) {
         part = body.parts[k];
 
-        if (body.isSleeping) {
-          c.globalAlpha = 0.5 * part.render.opacity;
-        } else if (part.render.opacity !== 1) {
-          c.globalAlpha = part.render.opacity;
-        }
+      
 
         // 이미지 렌더링
         if (part.render.sprite && part.render.sprite.texture) {
