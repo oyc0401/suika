@@ -166,7 +166,7 @@ function putFruit(nowBody) {
       label: currentFruit.label,
       render: {
         fillStyle: currentFruit.color,
-        // sprite: { texture: `./public/${currentFruit.label}.png` },
+        sprite: { texture: `./public/${currentFruit.label}.png` },
       },
       restitution: restitution,
     },
@@ -283,7 +283,7 @@ Events.on(engine, "collisionStart", (event) => {
         {
           render: {
             fillStyle: newFruit.color,
-            // sprite: { texture: `./public/${newFruit.label}.png` },
+            //sprite: { texture: `./public/${newFruit.label}.png` },
           },
           label: newFruit.label,
         },

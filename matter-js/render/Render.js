@@ -21,7 +21,7 @@ var Render = {};
 //var Mouse = require('../core/Mouse');
 
 (function () {
-  var _requestAnimationFrame, _cancelAnimationFrame;
+  var _requestAnimationFrame;
 
   if (typeof window !== "undefined") {
     _requestAnimationFrame =
@@ -34,12 +34,6 @@ var Render = {};
           callback(Common.now());
         }, 1000 / 60);
       };
-
-    _cancelAnimationFrame =
-      window.cancelAnimationFrame ||
-      window.mozCancelAnimationFrame ||
-      window.webkitCancelAnimationFrame ||
-      window.msCancelAnimationFrame;
   }
 
   Render._goodFps = 30;
@@ -50,53 +44,25 @@ var Render = {};
       engine: null,
       element: null,
       canvas: null,
-      mouse: null,
       frameRequestId: null,
       timing: {
         delta: 0,
         lastTime: 0,
-        lastTimestamp: 0,
-        lastElapsed: 0,
-        timestampElapsed: 0,
       },
       options: {
         width: 800,
         height: 600,
         pixelRatio: 1,
         background: "#14151f",
-        hasBounds: !!options.bounds,
-        enabled: true,
-        showSleeping: true,
       },
     };
 
     var render = Common.extend(defaults, options);
-    d(render)
 
-    render.mouse = options.mouse;
     render.engine = options.engine;
-    render.canvas =_createCanvas(render.options.width, render.options.height);
+    render.canvas = _createCanvas(render.options.width, render.options.height);
     render.context = render.canvas.getContext("2d");
     render.textures = {};
-
-    render.bounds = render.bounds || {
-      min: {
-        x: 0,
-        y: 0,
-      },
-      max: {
-        x: render.canvas.width,
-        y: render.canvas.height,
-      },
-    };
-
-    // for temporary back compatibility only
-    render.controller = Render;
-    render.options.showBroadphase = false;
-
-    if (render.options.pixelRatio !== 1) {
-      Render.setPixelRatio(render, render.options.pixelRatio);
-    }
 
     render.element.appendChild(render.canvas);
 
@@ -110,17 +76,6 @@ var Render = {};
       _updateTiming(render, time);
 
       Render.world(render, time);
-
-      render.context.setTransform(
-        render.options.pixelRatio,
-        0,
-        0,
-        render.options.pixelRatio,
-        0,
-        0,
-      );
-
-      render.context.setTransform(1, 0, 0, 1, 0, 0);
     })();
   };
 
@@ -138,10 +93,6 @@ var Render = {};
       bodies = [],
       i;
 
-    var event = {
-      timestamp: engine.timing.timestamp,
-    };
-
     // apply background if it has changed
     render.canvas.style.background = background;
 
@@ -154,9 +105,6 @@ var Render = {};
     bodies = allBodies;
 
     Render.bodies(render, bodies, context);
-
-    // log the time elapsed computing this update
-    timing.lastElapsed = Common.now() - startTime;
   };
 
   Render.bodies = function (render, bodies, context) {
@@ -177,14 +125,13 @@ var Render = {};
       for (k = body.parts.length > 1 ? 1 : 0; k < body.parts.length; k++) {
         part = body.parts[k];
 
-        if (!part.render.visible) continue;
-
-        if (options.showSleeping && body.isSleeping) {
+        if (body.isSleeping) {
           c.globalAlpha = 0.5 * part.render.opacity;
         } else if (part.render.opacity !== 1) {
           c.globalAlpha = part.render.opacity;
         }
 
+        // 이미지 렌더링
         if (part.render.sprite && part.render.sprite.texture) {
           // part sprite
           var sprite = part.render.sprite,
@@ -220,35 +167,14 @@ var Render = {};
             c.moveTo(part.vertices[0].x, part.vertices[0].y);
 
             for (var j = 1; j < part.vertices.length; j++) {
-              if (!part.vertices[j - 1].isInternal || showInternalEdges) {
-                c.lineTo(part.vertices[j].x, part.vertices[j].y);
-              } else {
-                c.moveTo(part.vertices[j].x, part.vertices[j].y);
-              }
-
-              if (part.vertices[j].isInternal && !showInternalEdges) {
-                c.moveTo(
-                  part.vertices[(j + 1) % part.vertices.length].x,
-                  part.vertices[(j + 1) % part.vertices.length].y,
-                );
-              }
+              c.lineTo(part.vertices[j].x, part.vertices[j].y);
             }
-
             c.lineTo(part.vertices[0].x, part.vertices[0].y);
             c.closePath();
           }
 
-          if (!options.wireframes) {
-            c.fillStyle = part.render.fillStyle;
-
-            if (part.render.lineWidth) {
-              c.lineWidth = part.render.lineWidth;
-              c.strokeStyle = part.render.strokeStyle;
-              c.stroke();
-            }
-
-            c.fill();
-          }
+          c.fillStyle = part.render.fillStyle;
+          c.fill();
         }
 
         c.globalAlpha = 1;
@@ -258,14 +184,10 @@ var Render = {};
 
   var _updateTiming = function (render, time) {
     var engine = render.engine,
-      timing = render.timing,
-      timestamp = engine.timing.timestamp;
+      timing = render.timing;
 
     timing.delta = time - timing.lastTime || Render._goodDelta;
     timing.lastTime = time;
-
-    timing.timestampElapsed = timestamp - timing.lastTimestamp || 0;
-    timing.lastTimestamp = timestamp;
   };
 
   var _createCanvas = function (width, height) {
