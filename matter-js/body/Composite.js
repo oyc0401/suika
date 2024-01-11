@@ -185,14 +185,7 @@ var Composite = {};
             return composite.cache.allConstraints;
         }
 
-        var constraints = [].concat(composite.constraints);
-
-        for (var i = 0; i < composite.composites.length; i++)
-            constraints = constraints.concat(Composite.allConstraints(composite.composites[i]));
-
-        if (composite.cache) {
-            composite.cache.allConstraints = constraints;
-        }
+        var constraints = []
 
         return constraints;
     };

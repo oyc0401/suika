@@ -134,6 +134,7 @@ var Body = {};
         var defaultFillStyle = (body.isStatic ? '#14151f' : Common.choose(['#f19648', '#f5d259', '#f55a3c', '#063e7b', '#ececd1'])),
             defaultStrokeStyle = body.isStatic ? '#555' : '#ccc',
             defaultLineWidth = body.isStatic && body.render.fillStyle === null ? 1 : 0;
+      
         body.render.fillStyle = body.render.fillStyle || defaultFillStyle;
         body.render.strokeStyle = body.render.strokeStyle || defaultStrokeStyle;
         body.render.lineWidth = body.render.lineWidth || defaultLineWidth;
