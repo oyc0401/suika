@@ -29,33 +29,23 @@ const world = engine.world;
 
 const ground = Bodies.rectangle(310, 795, 600, boxW, {
   isStatic: true,
-  render: {
-    fillStyle: "#E6B143",
-  },
+  render: { fillStyle: "#E6B143" },
 });
 const leftWallTrans = Bodies.rectangle(7.5, 200, 15, 790, {
   isStatic: true,
-  render: {
-    fillStyle: "transparent",
-  },
+  render: { fillStyle: "transparent" },
 });
 const rightWallTrans = Bodies.rectangle(582.5, 200, 15, 790, {
   isStatic: true,
-  render: {
-    fillStyle: "transparent",
-  },
+  render: { fillStyle: "transparent" },
 });
 const leftWall = Bodies.rectangle(7, 510, 15, 680, {
   isStatic: true,
-  render: {
-    fillStyle: "#E6B143",
-  },
+  render: { fillStyle: "#E6B143" },
 });
 const rightWall = Bodies.rectangle(582.5, 510, 15, 680, {
   isStatic: true,
-  render: {
-    fillStyle: "#E6B143",
-  },
+  render: { fillStyle: "#E6B143" },
 });
 
 const boxFront = Bodies.rectangle(590 / 2, 165 + 7.5, 600, 15, {
@@ -72,17 +62,13 @@ const boxleft = Bodies.rectangle(22.5, 145 + 7.5, 90, 15, {
   isStatic: true,
   angle: -Math.PI / 4,
   isSensor: true,
-  render: {
-    fillStyle: "#E6B143",
-  },
+  render: { fillStyle: "#E6B143" },
 });
 const boxright = Bodies.rectangle(570 - 2.5, 145 + 7.5, 90, 15, {
   isStatic: true,
   angle: Math.PI / 4,
   isSensor: true,
-  render: {
-    fillStyle: "#E6B143",
-  },
+  render: { fillStyle: "#E6B143" },
 });
 
 // 경계선 높이: 110
@@ -197,6 +183,22 @@ function upbox() {
   World.add(world, boxFront);
 }
 
+function afterCol() {
+  if (currentBody.position.y - currentBody.circleRadius < 110) {
+    gameover();
+  }
+  currentBody = null;
+  online();
+  addCurrentFruit();
+  disableAction = false;
+}
+
+function gameover() {
+  alert("게임 오버");
+  Render.stop();
+  Runner.stop();
+}
+
 window.onkeydown = (event) => {
   if (disableAction) return;
 
@@ -231,16 +233,6 @@ window.onkeydown = (event) => {
   }
 };
 
-function afterCol() {
-  if (currentBody.position.y - currentBody.circleRadius < 110) {
-    alert("넘었다고!");
-  }
-  currentBody = null;
-  online();
-  addCurrentFruit();
-  disableAction = false;
-}
-
 window.onkeyup = (event) => {
   switch (event.code) {
     case "ArrowLeft":
@@ -252,14 +244,7 @@ window.onkeyup = (event) => {
 
 Events.on(engine, "collisionStart", (event) => {
   event.pairs.forEach((collision) => {
-    if (
-      !collision.bodyA.isSensor &&
-      !collision.bodyB.isSensor &&
-      (collision.bodyA == currentBody || collision.bodyB == currentBody)
-    ) {
-      afterCol();
-    }
-
+    // 과일 병합
     if (
       collision.bodyA.label === collision.bodyB.label &&
       !collision.bodyA.isSensor &&
@@ -288,17 +273,29 @@ Events.on(engine, "collisionStart", (event) => {
           label: newFruit.label,
         },
       );
-      if (body.position.y - body.circleRadius < 110) {
-        alert("합쳐져서 넘음!");
-      }
+
       World.add(world, body);
+      if (body.position.y - body.circleRadius < 110) {
+        gameover();
+      }
     }
+
+    // 천장에 닿으면
     if (
       (collision.bodyA.label === "topLine" ||
         collision.bodyB.label === "topLine") &&
       !disableAction
     ) {
-      alert("Game over");
+      gameover();
+    }
+
+    // 다음 과일
+    if (
+      !collision.bodyA.isSensor &&
+      !collision.bodyB.isSensor &&
+      (collision.bodyA == currentBody || collision.bodyB == currentBody)
+    ) {
+      afterCol();
     }
   });
 });

@@ -21,7 +21,7 @@ var Runner = {};
 //var Common = require('./Common');
 
 (function () {
-  var _requestAnimationFrame, _cancelAnimationFrame;
+  var _requestAnimationFrame;
 
   if (typeof window !== "undefined") {
     _requestAnimationFrame =
@@ -29,25 +29,13 @@ var Runner = {};
       window.webkitRequestAnimationFrame ||
       window.mozRequestAnimationFrame ||
       window.msRequestAnimationFrame;
-
-    _cancelAnimationFrame =
-      window.cancelAnimationFrame ||
-      window.mozCancelAnimationFrame ||
-      window.webkitCancelAnimationFrame ||
-      window.msCancelAnimationFrame;
   }
 
   if (!_requestAnimationFrame) {
-    var _frameTimeout;
-
     _requestAnimationFrame = function (callback) {
       _frameTimeout = setTimeout(function () {
         callback(Common.now());
       }, 1000 / 60);
-    };
-
-    _cancelAnimationFrame = function () {
-      clearTimeout(_frameTimeout);
     };
   }
 
@@ -60,7 +48,6 @@ var Runner = {};
       deltaHistory: [],
       timePrev: null,
       frameRequestId: null,
-      isFixed: false,
       enabled: true,
     };
 
@@ -82,7 +69,7 @@ var Runner = {};
     }
 
     (function run(time) {
-      runner.frameRequestId = _requestAnimationFrame(run);
+      if (Runner.running) runner.frameRequestId = _requestAnimationFrame(run);
 
       if (time && runner.enabled) {
         Runner.tick(runner, engine, time);
@@ -93,36 +80,25 @@ var Runner = {};
   };
 
   Runner.tick = function (runner, engine, time) {
-    var timing = engine.timing,
-      delta;
+    var delta;
 
-    if (runner.isFixed) {
-      // fixed timestep
-      delta = runner.delta;
-    } else {
-      // dynamic timestep based on wall clock between calls
-      delta = time - runner.timePrev || runner.delta;
-      runner.timePrev = time;
+    // dynamic timestep based on wall clock between calls
+    delta = time - runner.timePrev || runner.delta;
+    runner.timePrev = time;
 
-      // optimistically filter delta over a few frames, to improve stability
-      runner.deltaHistory.push(delta);
-      runner.deltaHistory = runner.deltaHistory.slice(-runner.deltaSampleSize);
-      delta = Math.min.apply(null, runner.deltaHistory);
+    // optimistically filter delta over a few frames, to improve stability
+    runner.deltaHistory.push(delta);
+    runner.deltaHistory = runner.deltaHistory.slice(-runner.deltaSampleSize);
+    delta = Math.min.apply(null, runner.deltaHistory);
 
-      // limit delta
-      delta = delta < runner.deltaMin ? runner.deltaMin : delta;
-      delta = delta > runner.deltaMax ? runner.deltaMax : delta;
+    //d(delta);
 
-      // update engine timing object
-      runner.delta = delta;
-    }
+    // limit delta
+    delta = delta < runner.deltaMin ? runner.deltaMin : delta;
+    delta = delta > runner.deltaMax ? runner.deltaMax : delta;
 
-    // create an event object
-    var event = {
-      timestamp: timing.timestamp,
-    };
-
-    Events.trigger(runner, "beforeTick", event);
+    // update engine timing object
+    runner.delta = delta;
 
     // fps counter
     runner.frameCounter += 1;
@@ -132,17 +108,12 @@ var Runner = {};
       runner.counterTimestamp = time;
       runner.frameCounter = 0;
     }
-  
+
     Engine.update(engine, delta);
-
-    
   };
 
-  Runner.stop = function (runner) {
-    _cancelAnimationFrame(runner.frameRequestId);
-  };
-
-  Runner.start = function (runner, engine) {
-    Runner.run(runner, engine);
+  Runner.running = true;
+  Runner.stop = function () {
+    Runner.running = false;
   };
 })();

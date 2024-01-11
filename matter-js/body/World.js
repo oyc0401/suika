@@ -23,9 +23,6 @@ var World = {};
 
 (function() {
 
-    /**
-     * See above, aliases for back compatibility only
-     */
     World.create = Composite.create;
     World.add = Composite.add;
     World.remove = Composite.remove;

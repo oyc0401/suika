@@ -162,15 +162,11 @@ var Body = {};
             case 'isStatic':
                 Body.setStatic(body, value);
                 break;
-            case 'isSleeping':
-                Sleeping.set(body, value);
-                break;
+            
             case 'mass':
                 Body.setMass(body, value);
                 break;
-            case 'density':
-                Body.setDensity(body, value);
-                break;
+           
             case 'inertia':
                 Body.setInertia(body, value);
                 break;
@@ -180,27 +176,13 @@ var Body = {};
             case 'position':
                 Body.setPosition(body, value);
                 break;
-            case 'angle':
-                Body.setAngle(body, value);
-                break;
-            case 'velocity':
-                Body.setVelocity(body, value);
-                break;
-            case 'angularVelocity':
-                Body.setAngularVelocity(body, value);
-                break;
-            case 'speed':
-                Body.setSpeed(body, value);
-                break;
-            case 'angularSpeed':
-                Body.setAngularSpeed(body, value);
-                break;
+            
+            
+           
             case 'parts':
                 Body.setParts(body, value);
                 break;
-            case 'centre':
-                Body.setCentre(body, value);
-                break;
+           
             default:
                 body[property] = value;
 

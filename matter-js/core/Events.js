@@ -14,6 +14,8 @@ var Events = {};
 
 (function() {
 
+  
+
     Events.on = function(object, eventNames, callback) {
         var names = eventNames.split(' '),
             name;

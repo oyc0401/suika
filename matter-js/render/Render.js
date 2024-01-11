@@ -36,7 +36,6 @@ var Render = {};
       };
   }
 
-  Render._goodFps = 30;
   Render._goodDelta = 1000 / 60;
 
   Render.create = function (options) {
@@ -71,7 +70,7 @@ var Render = {};
 
   Render.run = function (render) {
     (function loop(time) {
-      render.frameRequestId = _requestAnimationFrame(loop);
+      if (Render.running) render.frameRequestId = _requestAnimationFrame(loop);
 
       _updateTiming(render, time);
 
@@ -109,8 +108,6 @@ var Render = {};
 
   Render.bodies = function (render, bodies, context) {
     var c = context,
-      options = render.options,
-      showInternalEdges = true,
       body,
       part,
       i,
@@ -206,5 +203,10 @@ var Render = {};
     image.src = imagePath;
 
     return image;
+  };
+
+  Render.running = true;
+  Render.stop = function () {
+    Render.running = false;
   };
 })();
