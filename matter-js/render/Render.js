@@ -113,6 +113,50 @@ var Render = {};
       i,
       k;
 
+    // 사용자 코드
+    
+    // 왼쪽 면
+    c.beginPath();
+    c.moveTo(15, 190);
+    c.lineTo(55, 150); // 상단 가로선
+    c.lineTo(55, 770); // 오른쪽 대각선
+    c.lineTo(15, 810); // 하단 가로선
+    c.closePath();
+    c.fillStyle = "rgb(255,255,255,0.25)";
+    c.fill();
+
+    // 오른쪽 면
+    c.beginPath();
+    c.moveTo(575, 190);
+    c.lineTo(535, 150); 
+    c.lineTo(535, 770); 
+    c.lineTo(575, 810); 
+    c.closePath();
+    c.fillStyle = "rgb(255,255,255,0.25)";
+    c.fill();
+
+    // 앞 면
+    c.beginPath();
+    c.moveTo(15, 190);
+    c.lineTo(575, 190); // 상단 가로선
+    c.lineTo(575, 810); // 오른쪽 대각선
+    c.lineTo(15 , 810); // 하단 가로선
+    c.closePath();
+    c.fillStyle = "rgb(255,255,255,0.25)";
+    c.fill();
+
+    // 뒷 면
+    c.beginPath();
+    c.moveTo(55, 150);
+    c.lineTo(535, 150);
+    c.lineTo(535, 770);
+    c.lineTo(55 , 770);
+    c.closePath();
+    c.fillStyle = "rgb(250,255,190,0.56)";
+    c.fill();
+    
+    // 사용자 코드
+
     for (i = 0; i < bodies.length; i++) {
       body = bodies[i];
 
@@ -121,8 +165,6 @@ var Render = {};
       // handle compound parts
       for (k = body.parts.length > 1 ? 1 : 0; k < body.parts.length; k++) {
         part = body.parts[k];
-
-      
 
         // 이미지 렌더링
         if (part.render.sprite && part.render.sprite.texture) {

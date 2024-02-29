@@ -17,98 +17,92 @@ const render = Render.create({
   element: document.getElementById("app"),
   options: {
     background: "transparent",
-    width: 590 + 200,
-    height: 800+200,
+    width: 590+200,
+    height: 800 + 20,
   },
 });
 // 통 내부의 너비: 560
 // 통 내부의 높이: 680
 const boxW = 15;
-const pl=100;
 
 const world = engine.world;
 
-const ground = Bodies.rectangle(295+pl, 795, 590, boxW, {
+const ground = Bodies.rectangle(295,815, 590, boxW, {
   isStatic: true,
-  render: { fillStyle: "#E6B143" },
-});
-const leftWallTrans = Bodies.rectangle(7.5+pl, 200, 15+pl+pl, 790, {
-  isStatic: true,
-  render: { fillStyle: "transparent" },
-});
-const rightWallTrans = Bodies.rectangle(582.5+pl, 200, 15+pl+pl, 790, {
-  isStatic: true,
-  render: { fillStyle: "transparent" },
-});
-const leftWall = Bodies.rectangle(7+pl,480, 15, 630, {
-  isStatic: true,
-  render: { fillStyle: "#E6B143" },
-});
-const rightWall = Bodies.rectangle(582.5+pl, 480, 15, 630, {
-  isStatic: true,
-  render: { fillStyle: "#E6B143" },
+  render: { fillStyle: "#F6D77D" },
 });
 
-const boxFront = Bodies.rectangle(590 / 2+pl, 165 + 7.5, 590, 15, {
+const leftWall = Bodies.rectangle(7.5, 480 + 20, 15, 630, {
+  isStatic: true,
+  render: { fillStyle: "#F6D77D" },
+});
+const rightWall = Bodies.rectangle(582.5, 480 + 20, 15, 630, {
+  isStatic: true,
+  render: { fillStyle: "#F6D77D" },
+});
+
+const boxEdgeFront = Bodies.rectangle(590 / 2, 165 + 7.5 + 20, 590, 15, {
   isStatic: true,
   isSensor: true,
-  render: { fillStyle: "#E6B143" },
+  render: { fillStyle: "#F6D77D" },
 });
-const boxBack = Bodies.rectangle(590 / 2+pl, 115 + 7.5, 490, 15, {
+const boxEdgeBack = Bodies.rectangle(590 / 2, 115 + 7.5 + 20, 490, 15, {
   isStatic: true,
   isSensor: true,
-  render: { fillStyle: "#E6B143" },
+  render: { fillStyle: "#F6D77D" },
 });
-const boxleft = Bodies.rectangle(22.5+pl, 145 + 7.5, 90, 15, {
+const boxEdgeLeft = Bodies.rectangle(22.5, 145 + 7.5 + 20, 90, 15, {
   isStatic: true,
   angle: -Math.PI / 4,
   isSensor: true,
-  render: { fillStyle: "#E6B143" },
+  render: { fillStyle: "#F6D77D" },
 });
-const boxright = Bodies.rectangle(560+pl, 145-7.5 + 7.5, 90-20, 15, {
+const boxEdgeRight = Bodies.rectangle(560, 145 + 20, 90 - 20, 15, {
   isStatic: true,
   angle: Math.PI / 4,
   isSensor: true,
-  render: { fillStyle: "#E6B143" },
+  render: { fillStyle: "#F6D77D" },
 });
 
+const topHeight = 110 + 20;
 // 경계선 높이: 110
-const topLine = Bodies.rectangle(310+pl, 60, 620, 100, {
+// 과일이 튕겨서 밖으로 나가지 못하게 하는 투명벽
+const topLine = Bodies.rectangle(310, 60 + 20, 620, 100, {
   isStatic: true,
   render: { fillStyle: "transparent" },
   label: "topLine",
 });
-const redline = Bodies.rectangle(310+pl, 110, 620, 2, {
+const redline = Bodies.rectangle(310, topHeight, 620, 2, {
   isStatic: true,
   isSensor: true,
-  render: { fillStyle: "#FF0000" },
+  render: { fillStyle: "red" },
   label: "redline",
 });
-const hintLine = Bodies.rectangle(295+pl, 510, 4, 800, {
+const hintLine = Bodies.rectangle(295, 510 + 20, 4, 800, {
   isStatic: true,
   isSensor: true,
   render: { fillStyle: "#FFFFFF" },
 });
-const cloud = Bodies.rectangle(295 + 50+pl, 110 - 30, 180, 90, {
+const cloud = Bodies.rectangle(295 + 50, 40 + 20, 180, 120, {
   isStatic: true,
   isSensor: true,
   render: { fillStyle: "#FFFFFF" },
 });
 
 World.add(world, [
-  boxBack,
+  boxEdgeBack,
   hintLine,
   ground,
   leftWall,
   rightWall,
-  boxleft,
-  boxright,
+  boxEdgeLeft,
+  boxEdgeRight,
   cloud,
-  leftWallTrans,
-  rightWallTrans,
-  boxFront,
+  //leftWallTrans,
+  // rightWallTrans,
+  boxEdgeFront,
 
-  redline,
+ // redline,
   topLine,
 ]);
 
@@ -120,12 +114,12 @@ let currentFruit = null;
 let interval = null;
 let disableAction = false;
 let restitution = 0.1;
-let lastPosition = 295+pl;
+let lastPosition = 295;
 
 function addNewFruit() {
   const randomFruit = getRandomFruit();
 
-  const body = Bodies.circle(lastPosition, 110+pl, randomFruit.radius, {
+  const body = Bodies.circle(lastPosition, topHeight - 20, randomFruit.radius, {
     label: randomFruit.label,
     isStatic: true,
     isSensor: true,
@@ -196,12 +190,12 @@ function online() {
 }
 
 function upbox() {
-  World.remove(world, boxFront);
-  World.add(world, boxFront);
+  World.remove(world, boxEdgeFront);
+  World.add(world, boxEdgeFront);
 }
 
 function afterCol() {
-  if (currentBody.position.y - currentBody.circleRadius < 110+pl) {
+  if (currentBody.position.y - currentBody.circleRadius < topHeight) {
     gameover();
   }
   currentBody = null;
@@ -225,7 +219,7 @@ window.onkeydown = (event) => {
     case "ArrowLeft":
       if (interval) return;
       interval = setInterval(() => {
-        if (currentBody.position.x - 53 > 15+pl && !disableAction) {
+        if (currentBody.position.x - 53 > 15 && !disableAction) {
           Body.setPosition(currentBody, {
             x: currentBody.position.x - 1,
             y: currentBody.position.y,
@@ -244,7 +238,7 @@ window.onkeydown = (event) => {
     case "ArrowRight":
       if (interval) return;
       interval = setInterval(() => {
-        if (currentBody.position.x + 53 < 575+pl && !disableAction) {
+        if (currentBody.position.x + 53 < 575 && !disableAction) {
           Body.setPosition(currentBody, {
             x: currentBody.position.x + 1,
             y: currentBody.position.y,
@@ -312,7 +306,7 @@ Events.on(engine, "collisionStart", (event) => {
       );
 
       World.add(world, body);
-      if (body.position.y - body.circleRadius < 110) {
+      if (body.position.y - body.circleRadius < topHeight) {
         gameover();
       }
     }
