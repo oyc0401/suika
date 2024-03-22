@@ -122,7 +122,7 @@ var Render = {};
     c.lineTo(55, 770); // 오른쪽 대각선
     c.lineTo(15, 810); // 하단 가로선
     c.closePath();
-    c.fillStyle = "rgb(255,255,255,0.25)";
+    c.fillStyle = "rgb(255,255,255,0.4)";
     c.fill();
 
     // 오른쪽 면
@@ -132,7 +132,7 @@ var Render = {};
     c.lineTo(535, 770); 
     c.lineTo(575, 810); 
     c.closePath();
-    c.fillStyle = "rgb(255,255,255,0.25)";
+    c.fillStyle = "rgb(255,255,255,0.4)";
     c.fill();
 
     // 앞 면
@@ -152,7 +152,7 @@ var Render = {};
     c.lineTo(535, 770);
     c.lineTo(55 , 770);
     c.closePath();
-    c.fillStyle = "rgb(250,255,190,0.56)";
+    c.fillStyle = "rgb(250,255,230,0.5)";
     c.fill();
     
     // 사용자 코드
