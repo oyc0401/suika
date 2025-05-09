@@ -240,7 +240,7 @@ var Body = {};
         var moment = body.inertia / (body.mass / 6);
         body.inertia = moment * (mass / 6);
         body.inverseInertia = 1 / body.inertia;
-
+console.log(mass)
         body.mass = mass;
         body.inverseMass = 1 / body.mass;
         body.density = body.mass / body.area;

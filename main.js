@@ -17,7 +17,7 @@ const render = Render.create({
   element: document.getElementById("app"),
   options: {
     background: "transparent",
-    width: 590+200,
+    width: 590 + 200,
     height: 800 + 20,
   },
 });
@@ -27,7 +27,7 @@ const boxW = 15;
 
 const world = engine.world;
 
-const ground = Bodies.rectangle(295,815, 590, boxW, {
+const ground = Bodies.rectangle(295, 815, 590, boxW, {
   isStatic: true,
   render: { fillStyle: "#F6D77D" },
 });
@@ -86,7 +86,7 @@ const hintLine = Bodies.rectangle(295, 510 + 20, 4, 800, {
 const cloud = Bodies.rectangle(295 + 50, 40 + 20, 180, 120, {
   isStatic: true,
   isSensor: true,
-  render: { fillStyle: "#FFFFFF" },
+  render: { fillStyle: "transparent" },
 });
 
 World.add(world, [
@@ -102,7 +102,7 @@ World.add(world, [
   // rightWallTrans,
   boxEdgeFront,
 
- // redline,
+  // redline,
   topLine,
 ]);
 
@@ -113,7 +113,7 @@ let currentBody = null;
 let currentFruit = null;
 let interval = null;
 let disableAction = false;
-let restitution = 0.1;
+let restitution = 0;
 let lastPosition = 295;
 
 function addNewFruit() {
@@ -128,6 +128,7 @@ function addNewFruit() {
       sprite: { texture: `./public/${randomFruit.label}.png` },
     },
     restitution: restitution,
+    mass: 1,
   });
   hintLine.render.fillStyle = "white";
   currentBody = body;
@@ -165,6 +166,7 @@ function dropFruit(nowBody) {
         sprite: { texture: `./public/${currentFruit.label}.png` },
       },
       restitution: restitution,
+      mass: 1,
     },
   );
 
@@ -299,9 +301,11 @@ Events.on(engine, "collisionStart", (event) => {
         {
           render: {
             fillStyle: newFruit.color,
-            //sprite: { texture: `./public/${newFruit.label}.png` },
+            sprite: { texture: `./public/${newFruit.label}.png` },
           },
           label: newFruit.label,
+          restitution: restitution,
+          mass: 1,
         },
       );
 
